@@ -289,7 +289,10 @@ class KDiffusionSampler:
         sigmas = self.get_sigmas(p, steps)
 
         sigma_sched = sigmas[steps - t_enc - 1:]
-        xi = x + noise * sigma_sched[0]
+        if p.denoising_strength == 1: 
+            xi = noise * sigma_sched[0]
+        else:
+            xi = x + noise * sigma_sched[0]
         
         extra_params_kwargs = self.initialize(p)
         parameters = inspect.signature(self.func).parameters
